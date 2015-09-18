@@ -1,5 +1,5 @@
 ---
-layout:
+layout: post
 title: Distributed_Cache
 categories: []
 tags: []
@@ -8,6 +8,7 @@ published: True
 ---
 
 Lots of intersting links about distributed cache:
+
 - http://blog.xebia.fr/2009/08/26/les-caches-ces-armes-a-manipuler-avec-precaution/
 - http://javalandscape.blogspot.in/2009/01/cachingcaching-algorithms-and-caching.html
 - In-process caching vs Distributed Caching:
@@ -48,8 +49,8 @@ Technologies studied:
 (see http://javalandscape.blogspot.fr/2009/03/intro-to-cachingcaching-algorithms-and.html)
 
 Technologies ignored:
-- Google Guava (not distributed, only in memory)
 
+- Google Guava (not distributed, only in memory)
 - Oracle Coherence
 - ElastiCache solution amazone payante à base de Redis ou Memcached
     - https://aws.amazon.com/fr/elasticache/
