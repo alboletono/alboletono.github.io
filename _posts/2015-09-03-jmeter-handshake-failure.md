@@ -50,8 +50,14 @@ By just looking at the previous log you can see that the cipher algorithm is SHA
 
 Still searching but we are not alone :)
 See https://answers.launchpad.net/ubuntu/+question/239272
+See https://community.oracle.com/thread/2382681?tstart=0
+
+I've tested to fetch the certificate and import it in java keystore, not better :
+sudo keytool  -importcert -file [mycertificate] -keystore /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/cacerts
+
+Perhaps by using another security provider like bouncy castle : http://docs.oracle.com/cd/E19830-01/819-4712/ablsc/index.html
+
+TLS_RSA_WITH_RC4_128_SHA
+https://bugs.openjdk.java.net/browse/JDK-8076221
 
 Another possible solution is to use the oracle jdk...
-
-What is interesting to see is that TLS_DHE_DSS_WITH_AES_128_CBC_SHA256 is told to be supported but this is not reality...
-
