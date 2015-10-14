@@ -26,6 +26,12 @@ Lots of intersting links about distributed cache:
     - http://www.johndcook.com/blog/2009/07/06/brewer-cap-theorem-base/
 - OpenFHT:
     - http://vanillajava.blogspot.fr/2014/05/sharedhashmap-vs-redis.html
+- Performances
+    - https://bitbucket.org/ssmoot/scala-map-benchmarks
+- Scalability vs Availability
+    - http://blog.akquinet.de/2012/07/19/scalable-ha-clustering-with-jboss-as-7-eap-6/
+- Distributed architecture :
+    - http://blog.couchbase.com/distributed-databases-and-replication-design
 
 Technologies studied:
 
@@ -55,7 +61,7 @@ Technologies ignored:
 - ElastiCache solution amazone payante à base de Redis ou Memcached
     - https://aws.amazon.com/fr/elasticache/
 - JBoss cache (TreeCache)(replaced by JBoss data grid) --> too old?
-- EHCache (not distributed)
+- EHCache (distributed but too much linked to Terracota)
 - Memcached in C but gave protocol that is wide spread
 - Cassandra (nosql)
 - VMWare Gemfire more big data oriented and not yet open sourced (but will be incubated by apache)
