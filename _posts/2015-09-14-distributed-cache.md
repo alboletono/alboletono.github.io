@@ -7,7 +7,7 @@ published: True
 
 ---
 
-Lots of intersting links about distributed cache:
+Lots of interesting links about distributed cache:
 
 - http://blog.xebia.fr/2009/08/26/les-caches-ces-armes-a-manipuler-avec-precaution/
 - http://javalandscape.blogspot.in/2009/01/cachingcaching-algorithms-and-caching.html

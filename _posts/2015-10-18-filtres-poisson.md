@@ -1,5 +1,5 @@
 ---
-layout:
+layout: post
 title: filtres_poisson
 categories: []
 tags: []

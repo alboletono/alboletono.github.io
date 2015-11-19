@@ -1,0 +1,132 @@
+---
+layout: post
+title: Xsl parser quick start guide
+date: 2014-09-17 13:38:48.000000000 +02:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<p>Before starting, all the source code is available at https://code.google.com/p/nutch-parse-xsl-plugin/.</p>
+<p>As an example we will crawl a well known french site for friend searching: Copainsdavant.</p>
+<p>In order to configure quickly a crawler I'm using for copainsdavant web site:</p>
+<p>[code language="bash"]<br />
+mkdir -p ~/crawlers<br />
+cd 	~/crawlers<br />
+wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/nutch/1.9/apache-nutch-1.9-bin.tar.gz<br />
+gzip -d apache-nutch-1.9-bin.tar.gz<br />
+tar -xvf apache-nutch-1.9-bin.tar.gz<br />
+cd apache-nutch-1.9<br />
+mkdir -p urls<br />
+cd urls<br />
+touch seed.txt<br />
+[/code]</p>
+<p>Edit seed.txt and add the line:</p>
+<p>[code language="text"]<br />
+http://copainsdavant.linternaute.com/glossary/users/a<br />
+[/code]</p>
+<p>[code language="bash"]<br />
+cd apache-nutch-1.9<br />
+vi conf/nutch-site.xml<br />
+[/code]</p>
+<p>Edit conf/nutch-site.xml and add the lines:</p>
+<p>[code language="xml"]<br />
+&lt;property&gt;<br />
+ &lt;name&gt;http.agent.name&lt;/name&gt;<br />
+ &lt;value&gt;CopainsDavant Spider&lt;/value&gt;<br />
+&lt;/property&gt;</p>
+<p>&lt;property&gt;<br />
+	&lt;name&gt;parser.xsl.rulesFile&lt;/name&gt;<br />
+	&lt;value&gt;conf/parse-xsl-rules.xml&lt;/value&gt;<br />
+	&lt;description&gt;The XML file that contains rules to use<br />
+	&lt;/description&gt;<br />
+&lt;/property&gt;</p>
+<p>&lt;!-- We activate the xsl parser (to get metadata from xsl) --&gt;<br />
+&lt;property&gt;<br />
+  &lt;name&gt;plugin.includes&lt;/name&gt;<br />
+  &lt;value&gt;protocol-http|urlfilter-regex|parse-(html|tika)|parse-xsl|index-(basic|anchor|metadata)|indexer-solr|scoring-opic|urlnormalizer-(pass|regex|basic)&lt;/value&gt;<br />
+  &lt;description&gt;Regular expression naming plugin directory names to<br />
+  include.  Any plugin not matching this expression is excluded.<br />
+  In any case you need at least include the nutch-extensionpoints plugin. By<br />
+  default Nutch includes crawling just HTML and plain text via HTTP,<br />
+  and basic indexing and search plugins. In order to use HTTPS please enable<br />
+  protocol-httpclient, but be aware of possible intermittent problems with the<br />
+  underlying commons-httpclient library.<br />
+  &lt;/description&gt;<br />
+&lt;/property&gt;</p>
+<p>[/code]</p>
+<p>Copy the parser-xsl plugin and its associated plugin.xml to [NUTCH]/plugins/parse-xsl.<br />
+Download them on: https://drive.google.com/folderview?id=0B2rj-LWOgZmOZWc2MDBnemlNVFE&amp;usp=sharing</p>
+<p>Copy the rule file and the associated xsl file(s) (could be several depending of your rules) to your [NUTCH]/conf directory.</p>
+<p>Rule file example (conf/parse-xsl-rules.xml):</p>
+<p>[code language="xml"]<br />
+&lt;rules&gt;<br />
+	&lt;rule matches=&quot;http://copainsdavant\.linternaute\.com/p/\w+-\w+-\d+&quot;&gt;<br />
+		&lt;transformer file=&quot;conf/transformer_people.xsl&quot; /&gt;<br />
+	&lt;/rule&gt;<br />
+&lt;/rules&gt;<br />
+[/code]</p>
+<p>XSL file example (conf/transformer_people.xsl):</p>
+<p>[code language="xml"]<br />
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</p>
+<p>&lt;xsl:stylesheet version=&quot;1.0&quot;<br />
+	xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;</p>
+<p>	&lt;xsl:template match=&quot;/&quot;&gt;<br />
+		&lt;documents&gt;<br />
+			&lt;document&gt;<br />
+				&lt;field name=&quot;lastName&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:last_name']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;firstName&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:first_name']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;gender&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:gender']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;city&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//SPAN[@class='locality']&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;country&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//SPAN[@class='country-name']&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;birthDate&quot;&gt;<br />
+					&lt;xsl:variable name=&quot;extractedValue&quot; select=&quot;//H4[text()='Né le :']/../P&quot; /&gt;<br />
+					&lt;xsl:value-of select=&quot;normalize-space(substring-after(substring-before($extractedValue, '('), '.'))&quot; /&gt;<br />
+				&lt;/field&gt;<br />
+			&lt;/document&gt;<br />
+		&lt;/documents&gt;<br />
+	&lt;/xsl:template&gt;</p>
+<p>&lt;/xsl:stylesheet&gt;<br />
+[/code]</p>
+<p>Copy the conf/schema-solr4.xml from nutch to your solr server conf (usually example/solr/collection1/conf/schema.xml</p>
+<p>Do not forget to add the following line in Solr file:</p>
+<p>[code language="xml"]<br />
+&lt;field name=&quot;_version_&quot; type=&quot;long&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;<br />
+[/code]</p>
+<p>Also, add your custom fields, for example:</p>
+<p>[code language="xml"]<br />
+&lt;field name=&quot;lastName&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+&lt;field name=&quot;firstName&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+&lt;field name=&quot;gender&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+&lt;field name=&quot;city&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+&lt;field name=&quot;country&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+&lt;field name=&quot;birthDate&quot; type=&quot;string&quot; stored=&quot;true&quot; indexed=&quot;true&quot;/&gt;<br />
+[/code]</p>
+<p>[code language="bash"]<br />
+cd 	~/crawlers/apache-nutch-1.9<br />
+[/code]</p>
+<p>Edit bin/nutch and add the line (fit it to your jdk):</p>
+<p>[code language="text"]<br />
+NUTCH_JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64<br />
+[/code]</p>
+<p>If not exists (fit it to your jdk):</p>
+<p>[code language="bash"]<br />
+sudo apt-get install java-6-openjdk-jdk<br />
+[/code]</p>
+<p>Then run a test crawl:<br />
+[code language="bash"]<br />
+bin/crawl urls crawl http://localhost/solr 500<br />
+[/code]<br />
+For debug purpose, to avoid crawling lots of urls i'm just setting the sizeFetchList that is hardcoded into the crawl script to 50 instead of 5000.</p>

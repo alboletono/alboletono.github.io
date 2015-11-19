@@ -1,0 +1,63 @@
+---
+layout: post
+title: Compiling JBoss EAP 6.3.2
+date: 2015-03-30 11:48:34.000000000 +02:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<h1>Context</h1>
+<p>JBoss application server is provided as:</p>
+<ul>
+<li>A community version (old AS version now known as Wildfly to avoid confusion)</li>
+<li>The enterprise version (EAP) compiled by RedHat</li>
+</ul>
+<p>EAP version is bundled and compiled by RedHat and provides "normally" more reliability and stabililty as far as it is tested (and supported) by RedHat.</p>
+<p>EAP is open source but when you come across different forum threads (https://developer.jboss.org/thread/201103) you can quickly see that it can be a pain.</p>
+<p>BUT this is legally and technically possible! RedHat provides scripts and some split infos around the net making it hard to handle the compilation quickly but yes, this is possible.</p>
+<h1>Prequisites</h1>
+<ol>
+<li>A JDK 1.7</li>
+<li>Maven 3 installed</li>
+</ol>
+<h1>My configuration</h1>
+<ol>
+<li>Ubuntu 14.04.2 LTS</li>
+<li>Open JDK 1.7.0_75</li>
+<li>Maven 3.13</li>
+</ol>
+<h1>Compilation procedure</h1>
+<h2>Get the JBoss EAP 6.3.2 source code</h2>
+<pre>wget http://ftp.redhat.com/pub/redhat/jbeap/6.3.2/en/source/jboss-eap-6.3.2-src.zip
+unzip jboss-eap-6.3.2-src.zip
+cd jboss-eap-6.3
+</pre>
+<h2>Update the bundled maven settings with the RedHat public repository and replace all references to http://download.lab.bos.redhat.com/brewroot/repos/jb-eap-6.3-rhel-6-build/latest/maven/ by https://maven.repository.redhat.com/techpreview/all</h2>
+<pre>vi tools/maven/conf/settings.xml
+</pre>
+<h2>Skip maven tests when building</h2>
+<p>Replace line MVN_ARGS=${MVN_ARGS:-"$MVN_SETTINGS_XML_ARGS"}; with MVN_ARGS=${MVN_ARGS:-"$MVN_SETTINGS_XML_ARGS -DskipTests -X -e"}; in file build.sh</p>
+<h2>Install manually this package (that is on the alpha/beta public repo but not yet on the GA repo)</h2>
+<pre>wget https://maven.repository.redhat.com/earlyaccess/all/com/redhat/gss/redhat-support-lib-java/1.0.4.jbossorg-1/redhat-support-lib-java-1.0.4.jbossorg-1.jar
+mvn install:install-file -DgroupId=com.redhat.gss -DartifactId=redhat-support-lib-java -Dversion=1.0.4.jbossorg-1 -Dpackaging=jar -Dfile=redhat-support-lib-java-1.0.4.jbossorg-1.jar
+</pre>
+<h2>Perform the same previous thing for these three packages that are not present in the GA public repo:</h2>
+<ul>
+<li>stilts-stomp-client
+        </li>
+<li>stilts-stomplet-server-bundle
+        </li>
+<li>stilts-stomplet-server-core<br />
+<h2>Run the compilation</h2>
+<pre>./build.sh
+</pre>
+<h2>Run the application server</h2>
+<pre>cd build/target/jboss-as-7.4.2.Final-redhat-SNAPSHOT/bin
+./standalone.sh
+</pre>
+<h1>Conclusion</h1>
+<p>As you can see you got a full EAP version with no diff! Enjoy!</li>
+</ul>

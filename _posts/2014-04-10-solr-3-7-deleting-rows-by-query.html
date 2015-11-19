@@ -1,0 +1,20 @@
+---
+layout: post
+title: Solr 3.7 - Deleting rows by query
+date: 2014-04-10 13:40:17.000000000 +02:00
+type: post
+published: true
+status: publish
+categories: []
+tags:
+- solr
+
+---
+<p>In JSON you can delete directly in the index rows that fit a query.</p>
+<p>E.g.: in the following you can delete all results that have an url containing keyword total. Then it is directly committed.</p>
+<p>[code language="bash"]</p>
+<p>curl http://localhost:8983/solr/update/json -H 'Content-type:application/json' -d '</p>
+<p>{<br />
+&quot;delete&quot;: { &quot;query&quot;:&quot;url:*&quot;, &quot;commitWithin&quot;:500   }<br />
+}'</p>
+<p>[/code]</p>

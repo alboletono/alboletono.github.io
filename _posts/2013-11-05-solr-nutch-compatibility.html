@@ -1,0 +1,37 @@
+---
+layout: post
+title: Solr / nutch compatibility
+date: 2013-11-05 14:53:12.000000000 +01:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+
+---
+<p>To avoid a schema incompatibility with "job failed" message (as described in http://stackoverflow.com/questions/13177637/nutch-1-5-1-solrindex-java-io-ioexception-job-failed) i'm using nutch 1.7 and solr 3.6.2.</p>
+<p>So I'm basically crawling with nutch 1.7. The index is then posted to Solr.</p>
+<p>To avoid a big infrastructure to be put "online" (I only have a basic web provider) I would like to us zend_search_lucene PHP class (see zend framework 1.12). It could allow me to open my Solr indexes and deserve queries with a basic php front end. Unfortunately I didn't succeeded into using zend search, it is only compatible with 2.3 indexes. Mine is at least 3.X....</p>
+<p>So I have not so many solutions I have to get a java host provider... But in fact this is not so bad there are several more features with Solr that were not available with zend search.</p>
+<p>&nbsp;</p>
+<h2>Update of 17/09/2014</h2>
+<p>I'm facing same problems with Nutch 1.9 and Solr 4.11.<br />
+All is related to the schema.xml you will use.<br />
+There are 2 solutions:</p>
+<ul>
+<li>copy the conf/schema-solr4.xml from nutch to your solr server conf (usually example/solr/collection1/conf/schema.xml
+<ul>
+<li>Do not forget to add the following line:
+<ul>
+<li>&lt;field name="_version_" type="long" indexed="true" stored="true"/&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>take time to understand the whole mapping:
+<ul>
+<li>I've copied/pasted most of the types and fields from Nutch to Solr and I've deleted the "copy fields" from Solr. You have to spend some time to fix each time each error from schema.xml.</li>
+<li>As a hint, you check each time the Solr logs that are explicit and each time you have to relaunch the server.</li>
+</ul>
+</li>
+</ul>

@@ -1,0 +1,36 @@
+---
+layout: post
+title: Liferay basic site and web content permissions
+date: 2015-06-29 11:51:54.000000000 +02:00
+type: post
+published: true
+status: publish
+categories:
+tags:
+- liferay
+
+---
+<h1>Site association</h1>
+<p>When you are authenticated on a private Liferay site you have to belong to the site. The default site has been created at the first run of the Liferay Portal.</p>
+<p>Once created, you have to tell that all your authenticated users belong to this site by default. This can be set by the following portal properties :</p>
+<pre>#
+# Input a list of default user group names separated by \n characters that
+# are associated with newly created users.
+#
+admin.default.user.group.names=My site
+
+#
+# Set this to true to ensure that a user is synchronized with the default
+# associations of groups, roles, and user groups upon every login. Set this
+# to false if default associations should only be applied to a user when a
+# user is created.
+#
+admin.sync.default.associations=true
+</pre>
+<p>&nbsp;</p>
+<p>If you do not set these properties all your new users won't be able to see your site pages. This will be notified as a 404 page not found by the portal (which is not really true, in fact this is more a "not allowed" error).</p>
+<p>&nbsp;</p>
+<h1>Web content permissions</h1>
+<p>By default, the web content will be seen by any user that can see the page.</p>
+<p>To have a more fine grain approach you should set journal.article.view.permission.check.enabled to true.</p>
+<p>Then you will have to define for each role the permissions "Web Content" and "Manage Web Content" to "see".</p>

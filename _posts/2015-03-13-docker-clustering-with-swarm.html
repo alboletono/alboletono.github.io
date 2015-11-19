@@ -1,0 +1,67 @@
+---
+layout: post
+title: Docker clustering with swarm
+date: 2015-03-13 13:14:31.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<h1>(Not so) small introduction</h1>
+<h2>Docker concept</h2>
+<p>Since my last article about installing an Oracle Express Edition 11g database I've head of another wonderful world (another one!): docker.</p>
+<p>Docker allows you to run applications with full operating system by using "containers". These are called images that are produced by the community and there are really plenty of. For information I installed my database in one command:<br />
+<code><br />
+sudo docker run -d -p 49160:22 -p 49161:1521 cpr:database<br />
+</code></p>
+<p>So when you have to setup quickly an environement for coding there is a real gain of time (but this is not the only thing).</p>
+<p>Like lots of developers I'm using virtual machines for dev or integration purposes. Most of the time you've got your set of already existing virtual machines, you are cloning them, tuning them (by adding applications, creating folders and files). And this can be time consuming and computer resources consuming too.</p>
+<p>With docker the "container" and "images" concepts allows you to list history of changes of your actions between commits, push them to the community, fork them, etc... with a command line approach very close to git.</p>
+<h2>Swarm concept</h2>
+<p>As usual I was very excited by all those promises but an additional tool really interested me: Swarm.</p>
+<p>It allows to manage your containers transparently:</p>
+<ul>
+<li>You create a cluster</li>
+<li>You set up nodes</li>
+<li>You define a cluster manager</li>
+</ul>
+<p>And that's all (for my basic usage). The manager will run containers on an "acceptable" cluster. Obviously you can tune the mecanism of "choosing which cluster is relevant for your use case" (see affinity, filtering, etc...)</p>
+<p>From what I've seen a full container won't be split into pieces and it will be associated to one cluster. So currently if you think you can dispatch one container (that would use lots of CPU or RAM) on several cluster nodes this is clearly not possible (this is not MPI/Beowulf clustering).</p>
+<p>So currently if you think about clusters of raspberry pi running big java applications servers, this is not a good idea (but always possible) ;)</p>
+<h1>Installation</h1>
+<h2>Docker</h2>
+<p>The docker installation will depend of your Operating System. See http://docs.docker.com/installation/.</p>
+<p>Furthermore it is strongly recommanded to install it on a recent 64 bits operating system. Otherwise you'll have to compile it (and this is done using Google GO language).</p>
+<p>I've seen this interesting article that show you how to install Docker on a Raspberry PI (ARM v7 processor 32 bits) installing an ArchLinux: https://resin.io/blog/docker-on-raspberry-pi-in-4-simple-steps/</p>
+<h2>Swarm</h2>
+<p>From the official Docker Swarm page: http://docs.docker.com/swarm/</p>
+<p>Franckly I didn't get exactly how to install it by using this doc! The following doc allowed me to understand the architecture and the parameters signification: http://blog.scottlowe.org/2015/03/06/running-own-docker-swarm-cluster/</p>
+<p>&nbsp;</p>
+<h1>Installation detailled steps</h1>
+<p>In my case I've done the following on my 64 bits quad core intel machine:</p>
+<ol>
+<li>Installed a Jessy (Debian 8) on my node1 (virtual machine under Virtual Box)</li>
+<li>Installed docker with apt-get</li>
+<li>Pulled the "swarm" image from docker</li>
+<li>Set up a specific address: 192.168.56.100</li>
+<li>Cloned my node1 into node2</li>
+</ol>
+<p>Then to make my cluster work, read the following.</p>
+<p>On cluster node1:</p>
+<ol>
+<li>Create the cluster:<br />
+<code>sudo docker run --rm swarm create</code></li>
+<li>Join the cluster by using the previous cluster id:</li>
+<li><code>sudo docker run -d swarm join --addr=192.168.56.100:2375 token://a3801cdc62e84c8b3d8d4c9f64feca16</code></li>
+<li><code>docker run -d -p 9999:2375 swarm manage token://a3801cdc62e84c8b3d8d4c9f64feca16</code></li>
+</ol>
+<p>&nbsp;<br />
+On cluster node2:</p>
+<ol>
+<li>Join the cluster by using the previous cluster id:</li>
+<li><code>sudo docker run -d swarm join --addr=192.168.56.101:2375 token://a3801cdc62e84c8b3d8d4c9f64feca16</code></li>
+</ol>
+<p>Then I can run common docker commands on the cluster:<br />
+<code>sudo docker -H tcp://192.168.56.100:9999 run -d ubuntu</code></p>

@@ -1,0 +1,44 @@
+---
+layout: post
+title: Debugging PHP applications with Eclipse
+date: 2013-12-29 09:22:18.000000000 +01:00
+type: post
+published: true
+status: publish
+categories: []
+tags:
+- php
+- pdt
+- eclipse
+
+---
+<p>I remember what I was using 5 years ago to debug PHP applications. It was not real debugging and only "output observation" under apache. I was using zend framework with a WAMP application and Eclipse.</p>
+<p>Now, it is possible to do far much better. The only is that it needs some extra configuration that you should know (and that is widely described on the web). It is really a shame that there is no php.ini embedded into Eclipse (at least the main updates to perform).</p>
+<p>By following the below sites instructions I made it possible to use Eclipse in a debug mode (like for Java). The main interest for me whas to get the output of my functions for testing purpose like phpunit. I didn't want to modify my script and then refresh my web page (it is a loss of time and end user testing).</p>
+<p>Here are the valuable sites I found:</p>
+<ul>
+<li>http://tech.rickumali.com/blog/2011/11/13/getting-php-debugging-xdebug-working-windows</li>
+<li>http://www.thierryb.net/pdtwiki/index.php?title=Using_PDT_:_Installation_:_Installing_the_XDebug_Debugger</li>
+</ul>
+<p>What I mainly did on my Debian distribution is:</p>
+<ol>
+<li>Install Eclipse with PDT</li>
+<li>Download and install xdebug on the official site</li>
+<li>Install apache, php-cli debian packages</li>
+<li>Edit my php.ini (see detailed configuration above)</li>
+<li>Edit my Eclipse PHP preferences (Debug and executables part with xdebug)</li>
+</ol>
+<p>My php.ini configuration:</p>
+<p>[code language="text"]</p>
+<p>output_buffering = 0</p>
+<p>implicit_flush = On</p>
+<p>[xdebug]</p>
+<p>xdebug.remote_enable=1</p>
+<p>xdebug.remote_host=&quot;localhost&quot;</p>
+<p>xdebug.remote_port=9000</p>
+<p>xdebug.remote_handler=&quot;dbgp&quot;</p>
+<p>xdebug.remote_log=c:eclipse-phpxdebug.log</p>
+<p>[/code]</p>
+<h3>Note of 8 January 2014 :</h3>
+<p>By using WAMP under Windows it is running very well without  changing php.ini because it is already in xdebug mode...</p>
+<p>&nbsp;</p>

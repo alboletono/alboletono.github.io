@@ -1,5 +1,5 @@
 ---
-layout:
+layout: post
 title: centos_commands
 categories: []
 tags: []

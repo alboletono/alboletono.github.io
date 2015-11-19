@@ -1,0 +1,31 @@
+---
+layout: post
+title: Installing D-Link AirbuPlus G+ wifi PCMCIA card on linux (xBuntu)
+date: 2014-09-06 12:35:39.000000000 +02:00
+type: post
+published: true
+status: publish
+categories:
+- howto
+tags:
+- linux
+- ndiswrapper
+- wifi
+
+---
+<ol>
+<li>Download the Windows XP driver: www.dlink.com/uk/en/support/product/dwl-g650plus-54mbps-pcmcia-cardbus-802-11g-wireless-adapter?revision=deu_revb#downloads and name it drivers.zip into your home.</li>
+<li>unzip drivers.zip</li>
+<li>cd drivers/</li>
+<li>unshield ~/drivers/English_Language/*.cab (apt-get install unshield)</li>
+<li>mkdir ~/install_wifi</li>
+<li>cp ~/drivers/English_Language/DrvXP ~/install_wifi</li>
+<li>cp ~/drivers/English_Language/InfXP ~/install_wifi</li>
+<li>cd ~/install_wifi</li>
+<li>A little trick: mv  GPlus_XP.sys T1130_XP.sys</li>
+<li>sudo ndiswrapper -i GPLUS.inf (apt-get install ndiswrapper ndiswrapper-dkms)</li>
+<li>Adding module: sudo ndiswrapper -m</li>
+<li>sudo modprobe -r ndiswrapper ; sudo modprobe -a ndiswrapper</li>
+<li>sudo iwconfig</li>
+<li>Then you can configure your wifi interface!</li>
+</ol>

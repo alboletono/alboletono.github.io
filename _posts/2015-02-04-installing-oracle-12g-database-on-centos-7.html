@@ -1,0 +1,77 @@
+---
+layout: post
+title: Installing Oracle 12g database on CentOS 7
+date: 2015-02-04 15:11:52.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<ol>
+<li>Get CentOS (network install is enougn)</li>
+<li>Install it (i'm setting it under VirtualBox) and avoid minimal install, lots of tools are not provided (ifconfig, netstat, etc...)
+<ol>
+<li>Infrastructure profile is good</li>
+</ol>
+</li>
+<li>An important prerequisite is to set up a 2GB swap !</li>
+<li>Configure the IP
+<ol>
+<li>vi /etc/sysconfig/network-scripts/ifcfg-[your device]</li>
+<li>Mine is enp0s8 (find it with ifconfig -a)</li>
+<li>I'm setting it static for accessing it through host only with virtual box</li>
+<li>IPADDR=192.168.56.3</li>
+<li>NETMASK=255.255.255.0</li>
+<li>NETWORK=192.168.56.0</li>
+<li>ONBOOT=yes</li>
+</ol>
+</li>
+<li>Restart the network
+<ol>
+<li>/etc/init.d/network restart</li>
+</ol>
+</li>
+<li>Get Oracle Xpress Edition on Oracle website (registration needed)</li>
+<li>unzip it</li>
+<li>rpm -i oracle-xe-11.2.0-1.0.x86_64.rpm</li>
+<li>Then you have to run the configure
+<ol>
+<li>'/etc/init.d/oracle-xe configure</li>
+</ol>
+</li>
+<li>I let all the values by default</li>
+<li>Start the oracle xe
+<ol>
+<li>/etc/init.d/oracle-xe start</li>
+<li>/etc/init.d/oracle-xe status</li>
+</ol>
+</li>
+<li>Disable iptables (on dev ;))
+<ol>
+<li>service iptables stop</li>
+<li>chkconfig iptables off</li>
+</ol>
+</li>
+<li>or allow all traffic
+<ol>
+<li>  iptables -I INPUT -j ACCEPT</li>
+</ol>
+</li>
+<li>Source the oracle variables or set it to your .bash_profile
+<ol>
+<li>source /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh</li>
+</ol>
+</li>
+<li>You can now log to 192.168.56.3:8080/apex with oracle/oracle</li>
+<li>You can now directly access your database</li>
+<li>With sqlplus
+<ol>
+<li>alter user hr identified by hr account unlock;</li>
+</ol>
+</li>
+</ol>
+<p>But after reboot, the listener cannot be started, this is due to bad hostname, see :</p>
+<p>https://technology.amis.nl/2013/06/26/oracle-12c-getting-started-with-db-express/</p>
+<p>The easiest way is to remove the listener.ora file then restart the listener to see how it is resolved.</p>

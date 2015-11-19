@@ -1,0 +1,340 @@
+---
+layout: post
+title: Xsl parser for apache Nutch
+date: 2014-09-25 16:01:46.000000000 +02:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<p>For people that cannot wait, you can jump directly to the quick start guide with provided compiled plugin: https://albinscoding.wordpress.com/2014/09/17/fast-nutch-configuration/</p>
+<h2>Common Nutch crawl scenario</h2>
+<p>Nutch is a great tool to crawl sites. Out of the box it can crawl http sites but can implement several other protocols.<br />
+Because it is transforming all inputs (PDF, DOC, TXT, etc...) in html with Apache Tika (another great Apache tool) you can manipulate html with DOM in java.</p>
+<p>Imagine you want to crawl PDFs on your personal site. Nutch will extract all PDFs metadata and the full text content without doing anything.</p>
+<h2>Specific crawl scenario</h2>
+<p>But now imagine you want to extract some specific piece of data in the content of a document. Nutch has a solution: plugins. And this is very powerful.</p>
+<p>Basically you will create a new parse plugin (based on the HtmlParseFilter interface) to manage your own metadata. You will have to manipulate the Document as a java DOM object. You can use several things like NodeWalker to iterate through nodes. After having written two little parsers of few lines it appeared to me that it was a little bit painful to write so much lines with attributes and tag checks. So why not using XSL like several other search engines?</p>
+<p>I know, XSL can take lots of processing, you have to know the language itself, etc... But with a generic XSL plugin you won't have to create each time a new parser and writing some boring java codes, just Xpaths. Furthermore, you will focus only on the metadata extraction by writing small Xpaths.</p>
+<h2>How the XSL parser works</h2>
+<p>Here is how it is integrated into the global Nutch crawling process (sorry for the poor figure):</p>
+<p>Fetching --&gt; HTML Parsing (Tika, HtmlParser) --&gt; <b>XSL plugin</b> --&gt; indexer plugins</p>
+<p>In the XSL plugin, you can extract data with Xpaths, XSL functions and predicates, create static metadata, etc... The only thing you have to do is to:</p>
+<ul>
+<li>create a set of rules: an XML file containing which transformation applying on a given url</li>
+<li>create a transformer: an XSL file that describes each field to extract.</li>
+</ul>
+<p>Rule file example:</p>
+<p>[code language="xml"]<br />
+&lt;rules&gt;<br />
+	&lt;rule matches=&quot;http://copainsdavant\.linternaute\.com/p/\w+-\w+-\d+&quot;&gt;<br />
+		&lt;transformer file=&quot;conf/transformer_people.xsl&quot; /&gt;<br />
+	&lt;/rule&gt;<br />
+&lt;/rules&gt;<br />
+[/code]</p>
+<p>XSL file example:</p>
+<p>[code language="xml"]<br />
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</p>
+<p>&lt;xsl:stylesheet version=&quot;1.0&quot;<br />
+	xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;</p>
+<p>	&lt;xsl:template match=&quot;/&quot;&gt;<br />
+		&lt;documents&gt;<br />
+			&lt;document&gt;<br />
+				&lt;field name=&quot;lastName&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:last_name']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;firstName&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:first_name']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;gender&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//META[@property='profile:gender']/@content&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;city&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//SPAN[@class='locality']&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;country&quot;&gt;<br />
+					&lt;xsl:value-of select=&quot;//SPAN[@class='country-name']&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>				&lt;field name=&quot;birthDate&quot;&gt;<br />
+					&lt;xsl:variable name=&quot;extractedValue&quot; select=&quot;//H4[text()='Né le :']/../P&quot; /&gt;<br />
+					&lt;xsl:value-of select=&quot;normalize-space(substring-after(substring-before($extractedValue, '('), '.'))&quot; /&gt;<br />
+				&lt;/field&gt;</p>
+<p>			&lt;/document&gt;<br />
+		&lt;/documents&gt;<br />
+	&lt;/xsl:template&gt;</p>
+<p>&lt;/xsl:stylesheet&gt;<br />
+[/code]</p>
+<p>The interesting part is the following, the equivalent by using pure Java code with NodeWalker technique:</p>
+<p>[code language="java"]<br />
+protected static void parsePeople(Node parent, Parse parse) {</p>
+<p>	NodeWalker walker = new NodeWalker(parent);</p>
+<p>	while (walker.hasNext()) {</p>
+<p>		NodeWrapper n = new NodeWrapper(walker.nextNode());<br />
+		NodeWrapper result = null;</p>
+<p>		// First name<br />
+		if ((result = n.matchesTagWithAttribute(&amp;amp;quot;meta&amp;amp;quot;, &amp;amp;quot;property&amp;amp;quot;,<br />
+		                &amp;amp;quot;profile:first_name&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        String value = result.getAttributeValue(&amp;amp;quot;content&amp;amp;quot;);<br />
+		        addMetadata(parse, CommonMetadata.META_PEOPLE_FIRST_NAME, value);<br />
+		        walker.skipChildren();<br />
+		} else<br />
+		// Last name<br />
+		if ((result = n.matchesTagWithAttribute(&amp;amp;quot;meta&amp;amp;quot;, &amp;amp;quot;property&amp;amp;quot;,<br />
+		                &amp;amp;quot;profile:last_name&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        String value = result.getAttributeValue(&amp;amp;quot;content&amp;amp;quot;);<br />
+		        addMetadata(parse, CommonMetadata.META_PEOPLE_LAST_NAME, value);<br />
+		        walker.skipChildren();<br />
+		} else<br />
+		// gender<br />
+		if ((result = n.matchesTagWithAttribute(&amp;amp;quot;meta&amp;amp;quot;, &amp;amp;quot;property&amp;amp;quot;,<br />
+		                &amp;amp;quot;profile:gender&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        String value = result.getAttributeValue(&amp;amp;quot;content&amp;amp;quot;);<br />
+		        addMetadata(parse, CommonMetadata.META_PEOPLE_GENDER, value);<br />
+		        walker.skipChildren();<br />
+		} else<br />
+		// city<br />
+		if ((result = n<br />
+		                .matchesTagWithAttribute(&amp;amp;quot;span&amp;amp;quot;, &amp;amp;quot;class&amp;amp;quot;, &amp;amp;quot;locality&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        String value = result.getTextContent();<br />
+		        addMetadata(parse, CommonMetadata.META_PEOPLE_CITY, value);<br />
+		        walker.skipChildren();</p>
+<p>		} else<br />
+		// country<br />
+		if ((result = n.matchesTagWithAttribute(&amp;amp;quot;span&amp;amp;quot;, &amp;amp;quot;class&amp;amp;quot;,<br />
+		                &amp;amp;quot;country-name&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        String value = result.getTextContent();<br />
+		        addMetadata(parse, CommonMetadata.META_PEOPLE_COUNTRY, value);<br />
+		        walker.skipChildren();<br />
+		} else<br />
+		// birth date<br />
+		if ((result = n.matchesTagWithContent(&amp;amp;quot;h4&amp;amp;quot;, &amp;amp;quot;Né le :&amp;amp;quot;)) != NodeWrapper.NULL_NODE) {<br />
+		        walker.skipChildren();</p>
+<p>		        // Normally the birth date is after the specific title<br />
+		        NodeWrapper next = n.findNextElement(walker, &amp;amp;quot;p&amp;amp;quot;);</p>
+<p>		        if (next != NodeWrapper.NULL_NODE) {<br />
+		                String value = next.getTextContent();<br />
+		                Pattern pattern = Pattern.compile(&amp;amp;quot;.*(\\d{4}).*&amp;amp;quot;);<br />
+		                Matcher matcher = pattern.matcher(value);<br />
+		                if (matcher.matches() &amp;amp;amp;&amp;amp;amp; matcher.groupCount() == 1) {<br />
+		                        addMetadata(parse, CommonMetadata.META_PEOPLE_BIRTH_DATE,<br />
+		                                        matcher.group(1));<br />
+		                }<br />
+		        }<br />
+		        walker.skipChildren();<br />
+		}<br />
+}</p>
+<p>[/code]</p>
+<p>And here is an almost complete utility to manipulate NodeWalker (home made):<br />
+[code language="java"]<br />
+/**<br />
+ * Some utilities to get html tag/attributes using TagSoup.<br />
+ *<br />
+ * @author avigier<br />
+ *<br />
+ */<br />
+public class NodeWrapper {</p>
+<p>        private Node node;</p>
+<p>        /** A null node when no matching resulting node */<br />
+        public static NodeWrapper NULL_NODE = new NodeWrapper();</p>
+<p>        private static final Logger LOG = LoggerFactory<br />
+                        .getLogger(NodeWrapper.class);</p>
+<p>        private NodeWrapper() {<br />
+                super();<br />
+                this.node = new NodeImpl();<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param node<br />
+         *            the node on which getting html information<br />
+         */<br />
+        public NodeWrapper(Node node) {<br />
+                this();<br />
+                this.node = node;<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param tag<br />
+         *            the tag of the child to get<br />
+         * @param attributeName<br />
+         *            the attribute name of the child to get (if specified)<br />
+         * @param attributeValue<br />
+         *            the attribute value of the child to get (if specified)<br />
+         * @return the nodewrapper that corresponds to the query<br />
+         */<br />
+        public NodeWrapper getChildWithTag(String tag, String attributeName,<br />
+                        String attributeValue) {<br />
+                NodeWrapper result = NULL_NODE;</p>
+<p>                if (this.node.hasChildNodes()) {<br />
+                        for (int i = 0; i &amp;amp;lt; this.node.getChildNodes().getLength(); i++) {<br />
+                                Node current = this.node.getChildNodes().item(i);<br />
+                                boolean matches = current.getNodeName().equals(tag);<br />
+                                // An attribute has been specified<br />
+                                if (attributeName != null &amp;amp;amp;&amp;amp;amp; current.hasAttributes()) {<br />
+                                        matches = matches<br />
+                                                        &amp;amp;amp;&amp;amp;amp; current.getAttributes().getNamedItem(<br />
+                                                                        attributeName) != null;<br />
+                                        // An attribute value has been specified<br />
+                                        if (attributeValue != null &amp;amp;amp;&amp;amp;amp; matches) {<br />
+                                                matches = attributeValue.equals(current.getAttributes()<br />
+                                                                .getNamedItem(attributeName).getNodeValue());<br />
+                                        }</p>
+<p>                                }<br />
+                                if (matches) {<br />
+                                        result = new NodeWrapper(current);<br />
+                                        break;<br />
+                                }<br />
+                        }<br />
+                }</p>
+<p>                return result;<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param walker<br />
+         * @param tag<br />
+         *            the tag name to find<br />
+         * @return the found node if any<br />
+         */<br />
+        public NodeWrapper findNextElement(NodeWalker walker, String tag) {<br />
+                NodeWrapper result = null;<br />
+                boolean found = false;<br />
+                Node current = null;<br />
+                while (walker.hasNext() &amp;amp;amp;&amp;amp;amp; !found) {<br />
+                        current = walker.nextNode();<br />
+                        found = current.getNodeType() == Node.ELEMENT_NODE;<br />
+                }</p>
+<p>                // Checking if the found element matches the expected tag<br />
+                if (found &amp;amp;amp;&amp;amp;amp; current != null &amp;amp;amp;&amp;amp;amp; tag.equals(current.getNodeName())) {<br />
+                        result = new NodeWrapper(current);<br />
+                } else {<br />
+                        result = NULL_NODE;<br />
+                }</p>
+<p>                return result;<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param tag<br />
+         *            the tag of the child to get.<br />
+         * @return the node wrapper that corresponds to the query.<br />
+         */<br />
+        public NodeWrapper getChildWithTag(String tag) {<br />
+                return this.getChildWithTag(tag, null, null);<br />
+        }</p>
+<p>        /**<br />
+         * If it matches the node, the node itself is returned. Otherwise the fake<br />
+         * null node.<br />
+         *<br />
+         * @param tag<br />
+         * @param attributeName<br />
+         * @param attributeValue<br />
+         * @return If it matches the node, the node itself is returned. Otherwise<br />
+         *         the fake null node.<br />
+         */<br />
+        public NodeWrapper matchesTagWithAttribute(String tag,<br />
+                        String attributeName, String attributeValue) {<br />
+                boolean matches = false;</p>
+<p>                if (tag.equals(this.node.getNodeName())) {<br />
+                        NamedNodeMap attributes = this.node.getAttributes();<br />
+                        if (attributes != null) {<br />
+                                Node attribute = attributes.getNamedItem(attributeName);</p>
+<p>                                // If an attribute value is provided, we use it for the<br />
+                                // comparison.<br />
+                                if (attributeValue != null &amp;amp;amp;&amp;amp;amp; attribute != null) {<br />
+                                        matches = attributeValue.equals(attribute.getNodeValue());<br />
+                                }<br />
+                        }<br />
+                }<br />
+                NodeWrapper result = null;<br />
+                if (matches) {<br />
+                        result = new NodeWrapper(this.node);<br />
+                } else {<br />
+                        result = NULL_NODE;<br />
+                }<br />
+                return result;</p>
+<p>        }</p>
+<p>        /**<br />
+         *<br />
+         * @param tag<br />
+         *            the tag to find<br />
+         * @param content<br />
+         *            the content to match<br />
+         * @return the node itself otherwise the null node.<br />
+         */<br />
+        public NodeWrapper matchesTagWithContent(String tag, String content) {</p>
+<p>                boolean matches = false;<br />
+                if (this.node.getTextContent() != null) {<br />
+                        try {<br />
+                                String utf8Content = new String(this.node.getTextContent()<br />
+                                                .getBytes(), &amp;amp;quot;UTF-8&amp;amp;quot;);</p>
+<p>                                matches = tag.equals(this.node.getNodeName())<br />
+                                                &amp;amp;amp;&amp;amp;amp; content.equals(utf8Content.trim());<br />
+                        } catch (Exception e) {<br />
+                                LOG.error(&amp;amp;quot;Cannot convert string to utf-8: &amp;amp;quot;<br />
+                                                + this.node.getTextContent());<br />
+                        }<br />
+                }</p>
+<p>                NodeWrapper result = null;<br />
+                if (matches) {<br />
+                        result = this;<br />
+                } else {<br />
+                        result = NULL_NODE;<br />
+                }<br />
+                return result;<br />
+        }</p>
+<p>        /**<br />
+         * If it matches the node, the node itself is returned. Otherwise the fake<br />
+         * null node. No check is done on the attribute value.<br />
+         *<br />
+         * @param tag<br />
+         * @param attributeName<br />
+         * @return If it matches the node, the node itself is returned. Otherwise<br />
+         *         the fake null node.<br />
+         */<br />
+        public NodeWrapper matchesTagWithAttribute(String tag, String attributeName) {</p>
+<p>                return this.matchesTagWithAttribute(tag, attributeName, null);<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @return the current node.<br />
+         */<br />
+        public Node getNode() {<br />
+                return this.node;<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param name<br />
+         *            the name of the attribute to get<br />
+         * @return the value of the attribute if it exists, null otherwise.<br />
+         */<br />
+        public String getAttributeValue(String name) {<br />
+                String result = null;</p>
+<p>                if (this.node.getAttributes() != null<br />
+                                &amp;amp;amp;&amp;amp;amp; this.node.getAttributes().getNamedItem(name) != null) {<br />
+                        result = this.node.getAttributes().getNamedItem(name)<br />
+                                        .getNodeValue().trim();<br />
+                }</p>
+<p>                return result;<br />
+        }</p>
+<p>        /**<br />
+         *<br />
+         * @param string<br />
+         *            the string from which stripping html tags.<br />
+         * @return<br />
+         */<br />
+        private String stripHtmlTags(String string) {<br />
+                return string.replaceAll(&amp;amp;quot;\\&amp;amp;lt;.*?\\&amp;amp;gt;&amp;amp;quot;, &amp;amp;quot;&amp;amp;quot;);</p>
+<p>        }</p>
+<p>        /**<br />
+         * Rewrites the Node.getTextContent to allow a strip of the tags and a trim.<br />
+         * @param string<br />
+         * @return the text content cleaned.<br />
+         */<br />
+        public String getTextContent() {<br />
+                String result = this.node.getTextContent();<br />
+                if (result != null)<br />
+                        result = this.stripHtmlTags(result.trim());<br />
+                return result;</p>
+<p>        }</p>
+<p>}<br />
+[/code]</p>

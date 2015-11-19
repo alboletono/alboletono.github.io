@@ -1,5 +1,5 @@
 ---
-layout:
+layout: post
 title: weblogic_session_ie_problem
 categories: []
 tags: []
@@ -7,9 +7,8 @@ published: True
 
 ---
 
-------------
 The problem
-------------
+-----------
 
 I got a portal. In that portal an embedded web application allows to download files.
 Under IE or Safari the files can't be downloaded. As far as this is JSF here is the piece of log:
@@ -19,14 +18,14 @@ javax.faces.application.ViewExpiredException: viewId:/decomptes.jsf - La vue «/
     at com.sun.faces.lifecycle.Phase.doPhase(Phase.java:101)
 {% endhighlight %}
 
--------------------------------
+
 I already had a similar problem
 -------------------------------
 I already got session problems with my portal. This was previously due to the cookie path that was the same all around my web applications.
 But the problem was that the portal is using session and web application were stateless.
 By having the same JSESSIONID cookie name and cookie path set to "/" we were losing sessions. I've fixed it by setting a specific cookie path to my portal "/portal".
 
--------------------------------------
+
 People with same problems leads me...
 -------------------------------------
 
@@ -40,7 +39,7 @@ But why in hell was it happening now? It was not the first time I've deployed th
 This was due to previously having used Tomcat or JBoss. They have a default parameter called trailing slash that was always added, so fixing those browsers bugs.
 But under Weblogic 12c this is not managed automatically.
 
-----------
+
 Conclusion
 ----------
 

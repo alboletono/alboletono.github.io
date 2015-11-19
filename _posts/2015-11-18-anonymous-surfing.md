@@ -1,5 +1,5 @@
 ---
-layout:
+layout: post
 title: anonymous_surfing
 categories: []
 tags: []

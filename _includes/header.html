@@ -20,7 +20,26 @@
           {% endif %}
         {% endfor %}
       </div>
+
     </nav>
+    <div style="float: left;">
+      <div>
+        <span>Categories : </span>
+        {% for category in site.categories %}
+          <a href="/list.html?category={{ category | first | slugize }}">
+              {{ category | first }}
+          </a>
+        {% endfor %}
+      </div>
+      <div>
+        <span>Tags : </span>
+        {% for category in site.tags %}
+          <a href="/list.html?tag={{ category | first | slugize }}">
+              {{ category | first }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
 
   </div>
 

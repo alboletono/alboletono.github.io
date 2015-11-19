@@ -1,0 +1,46 @@
+---
+layout: post
+title: JVM performance benchmark
+date: 2015-03-15 13:49:31.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+tags: []
+
+---
+<h1>Introduction</h1>
+<p>It is always hard to measure performance of an application or framework. Recently I had to measure performance of different JDKs.<br />
+By searching on the net Oracle and lots of people were arguing at each new JDK that is was faster, better and whatever.<br />
+Some people were trying to make some home made small benchmarks to show "Oh yeah this is working great and faster!" and that was true for some specific improvements (like big arrays).</p>
+<p>[Edit of 17/03/2015] I've found another interesting tool to be tested: http://math.nist.gov/scimark2/</p>
+<p>In fact I didn't find really any serious benchmark results related to the whole JDK.</p>
+<h1>Perform you own tests</h1>
+<p>However I found a really nice tool - SPECjvm2008 - that allowed me to run a set of different tests (called workloads). You can get it here: <a href="https://www.spec.org/download.html">https://www.spec.org/download.html</a></p>
+<p>To see all tests that are performed you can see the explained list here:<a href="https://www.spec.org/jvm2008/docs/benchmarks/index.html"> https://www.spec.org/jvm2008/docs/benchmarks/index.html</a></p>
+<p>With this tool I was able to run tests for JDK 1.6, 1.7 and 1.8. Off course you have to install all the relevant JDKs ;).</p>
+<p>For information I run all the tests on my 4 cores CPU on Ubuntu 14.04.</p>
+<ol>
+<li>Choose the JDK to test :
+<ol>
+<li>sudo update-alternatives --config java</li>
+</ol>
+</li>
+<li>Run the test :
+<ol>
+<li>./run-specjvm.sh</li>
+</ol>
+</li>
+<li>Wait for a few hours ;)</li>
+</ol>
+<p>And that's all ;)</p>
+<p>Except for JDK 1.8, the sunflow will fail and this is due to the benchmark tool that is developped under JDK 1.7. I had my test stucked at sunflow startup.</p>
+<p>&nbsp;</p>
+<p>To workaround this problem I just removed the sunflow workload test. I've duplicated the run-specjvm.sh and edited it to specify all workloads except the sunflow like this :<br />
+<code>$JAVA_EXE $EXTRA_BOOTCLASSPATH_ARG $JAVA_OPTS -jar SPECjvm2008.jar $* startup.helloworld startup.compiler.compiler startup.compress startup.crypto.aes startup.crypto.rsa startup.crypto.signverify startup.mpegaudio startup.scimark.fft startup.scimark.lu startup.scimark.monte_carlo startup.scimark.sor startup.scimark.sparse startup.serial startup.xml.transform startup.xml.validation compiler.compiler compress crypto.aes crypto.rsa crypto.signverify derby mpegaudio scimark.fft.large scimark.lu.large scimark.sor.large scimark.sparse.large scimark.fft.small scimark.lu.small scimark.sor.small scimark.sparse.small scimark.monte_carlo serial xml.transform xml.validation</code><br />
+&nbsp;</p>
+<p>Then again after the tests are done under JDK 1.8 you got an error related to the report generation "image.io.jpeg" or whatever. So I came back to opend JDK 1.7 and generated the report manually by using the following command (for example):<br />
+<code>./report.sh results/SPECjvm2008.001/SPECjvm2008.001.raw</code><br />
+&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

@@ -1,0 +1,20 @@
+---
+layout: post
+title: Nutch - add specific metadata
+date: 2014-03-19 14:53:52.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+- howto
+tags:
+- nutch
+
+---
+<p>Here is the practical case: crawling a cooking site (marmiton.org).</p>
+<p>Initially, I made the mistake of copy/pasting parser-html (yes, yes!) and update it according to my needs.</p>
+<p>There is a better way (of course ;)). By exploring the code I noticed that there was a HtmlParseFilter interface! I've observed the "parse-js" code and see that it is doing something like I would.</p>
+<p>So I've duplicated the code of parse-js and adapt it to fit my needs. I could have used directly regexes instead of node walkers but no matter for my exercise it is working.</p>
+<p>I've added some JUnit tests to avoid deploying each time my extension to nutch and "voilà!", it is working!</p>
+<p>Do not forget to reference your new parser into your nuch-site.conf (in plugin-includes section).</p>
+<p>See code in attachment: <a href="http://alboletono.files.wordpress.com/2014/03/parse-filter-marmiton.doc">parse-filter-marmiton</a></p>
