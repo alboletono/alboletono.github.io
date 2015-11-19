@@ -1,0 +1,54 @@
+---
+layout: default
+---
+
+<!-- We display all the posts with a hidden class -->
+<h1 class="page-heading">Posts with <span id="entity_name"/></h1>
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <!-- Listing all categories -->
+      {% assign postCategories = '' %}
+      {% for category in post.categories %}
+        {% capture postCategories %}
+          {{ postCategories }} category-{{category | slugize}}
+        {% endcapture %}
+      {% endfor %}
+      <!-- Listing all tags -->
+      {% assign postTags = '' %}
+      {% for tag in post.tags %}
+        {% capture postTags %}
+          {{ postTags }} tag-{{tag | slugize}}
+        {% endcapture %}
+      {% endfor %}
+      <li class="post-hidden {{ postCategories }} {{ postTags }}">
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
+
+<script>
+    function process(entityType) {
+        // Selected tag for filtering
+        var entity = $.url('?' + entityType, window.url());
+
+        // Displays the entity name
+        if (entity !== undefined) {
+            $('#entity_name').text(entity);
+
+
+            entity = entity.replace('é', '').replace(' ', '-');
+
+            // Displays posts with tag or category
+            $('.' + entityType + '-' + entity).removeClass('post-hidden');
+        }
+    }
+
+    process('tag');
+    process('category');
+
+</script>
