@@ -3,10 +3,10 @@
   <channel>
     <title>Coding adventures</title>
     <description>some things.</description>
-    <link>http://albinweb.fr/albinscode//</link>
-    <atom:link href="http://albinweb.fr/albinscode//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 24 Nov 2015 11:14:34 +0100</pubDate>
-    <lastBuildDate>Tue, 24 Nov 2015 11:14:34 +0100</lastBuildDate>
+    <link>http://albinweb.fralbinscode//</link>
+    <atom:link href="http://albinweb.fralbinscode//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 24 Nov 2015 11:18:35 +0100</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2015 11:18:35 +0100</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -151,8 +151,8 @@ Au départ, je regardais beaucoup de films récents, me donnant une culture basi
 
 </description>
         <pubDate>Thu, 19 Nov 2015 00:00:00 +0100</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/11/19/private.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/19/private.html</guid>
+        <link>http://albinweb.fralbinscode//2015/11/19/private.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/11/19/private.html</guid>
         
         
       </item>
@@ -173,8 +173,8 @@ ruby -rubygems -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;require &amp;quot;je
 
 </description>
         <pubDate>Thu, 19 Nov 2015 00:00:00 +0100</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/11/19/importing-wordpress-to-jekyll.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/19/importing-wordpress-to-jekyll.html</guid>
+        <link>http://albinweb.fralbinscode//2015/11/19/importing-wordpress-to-jekyll.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/11/19/importing-wordpress-to-jekyll.html</guid>
         
         
       </item>
@@ -315,8 +315,8 @@ Au départ, je regardais beaucoup de films récents, me donnant une culture basi
 
 </description>
         <pubDate>Thu, 19 Nov 2015 00:00:00 +0100</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/11/19/chous.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/19/chous.html</guid>
+        <link>http://albinweb.fralbinscode//2015/11/19/chous.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/11/19/chous.html</guid>
         
         
       </item>
@@ -328,8 +328,8 @@ Au départ, je regardais beaucoup de films récents, me donnant une culture basi
 &lt;p&gt;A web browser using Tor: TorBrowser.&lt;/p&gt;
 </description>
         <pubDate>Wed, 18 Nov 2015 00:00:00 +0100</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/11/18/anonymous-surfing.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/18/anonymous-surfing.html</guid>
+        <link>http://albinweb.fralbinscode//2015/11/18/anonymous-surfing.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/11/18/anonymous-surfing.html</guid>
         
         
       </item>
@@ -346,8 +346,8 @@ service NetworkManager start&lt;/p&gt;
 ifup enp0s3&lt;/p&gt;
 </description>
         <pubDate>Tue, 03 Nov 2015 00:00:00 +0100</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/11/03/centos-commands.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/03/centos-commands.html</guid>
+        <link>http://albinweb.fralbinscode//2015/11/03/centos-commands.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/11/03/centos-commands.html</guid>
         
         
       </item>
@@ -365,8 +365,8 @@ ifup enp0s3&lt;/p&gt;
 &lt;p&gt;A voir conditions d’achat sur http://www.zone-aquatique.com/Recharge_BIOBOX_-_EasyBox_ouate_XS-p12686.html&lt;/p&gt;
 </description>
         <pubDate>Sun, 18 Oct 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/10/18/filtres-poisson.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/10/18/filtres-poisson.html</guid>
+        <link>http://albinweb.fralbinscode//2015/10/18/filtres-poisson.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/10/18/filtres-poisson.html</guid>
         
         
       </item>
@@ -404,8 +404,8 @@ But under Weblogic 12c this is not managed automatically.&lt;/p&gt;
 &lt;p&gt;Thank you Weblogic, thanks to you I have to think a little bit and now I understand more IE/Safari logic for session handling ;)&lt;/p&gt;
 </description>
         <pubDate>Wed, 14 Oct 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/10/14/weblogic-session-ie-problem.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/10/14/weblogic-session-ie-problem.html</guid>
+        <link>http://albinweb.fralbinscode//2015/10/14/weblogic-session-ie-problem.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/10/14/weblogic-session-ie-problem.html</guid>
         
         
       </item>
@@ -418,8 +418,8 @@ But under Weblogic 12c this is not managed automatically.&lt;/p&gt;
 
 </description>
         <pubDate>Wed, 07 Oct 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/10/07/javascript-send-mail.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/10/07/javascript-send-mail.html</guid>
+        <link>http://albinweb.fralbinscode//2015/10/07/javascript-send-mail.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/10/07/javascript-send-mail.html</guid>
         
         
       </item>
@@ -441,8 +441,8 @@ But under Weblogic 12c this is not managed automatically.&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 06 Oct 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/10/06/liferay-custom-validator.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/10/06/liferay-custom-validator.html</guid>
+        <link>http://albinweb.fralbinscode//2015/10/06/liferay-custom-validator.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/10/06/liferay-custom-validator.html</guid>
         
         
       </item>
@@ -760,8 +760,8 @@ Méthode QSOS
 
 </description>
         <pubDate>Mon, 14 Sep 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/09/14/distributed-cache.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/09/14/distributed-cache.html</guid>
+        <link>http://albinweb.fralbinscode//2015/09/14/distributed-cache.html</link>
+        <guid isPermaLink="true">http://albinweb.fralbinscode//2015/09/14/distributed-cache.html</guid>
         
         
       </item>
