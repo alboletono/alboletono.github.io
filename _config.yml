@@ -2,7 +2,7 @@
 title: Coding adventures
 email: nomail
 description: some things.
-baseurl: "albinscode" # the subpath of your site, e.g. /blog/
+baseurl: "/albinscode/" # the subpath of your site, e.g. /blog/
 url: "http://albinweb.fr" # the base hostname & protocol for your site
 twitter_username: alboletono
 github_username:  alboletono
