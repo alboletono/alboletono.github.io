@@ -5,9 +5,97 @@
     <description>some things.</description>
     <link>http://albinweb.fr/albinscode//</link>
     <atom:link href="http://albinweb.fr/albinscode//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 24 Nov 2015 13:12:40 +0100</pubDate>
-    <lastBuildDate>Tue, 24 Nov 2015 13:12:40 +0100</lastBuildDate>
+    <pubDate>Tue, 24 Nov 2015 17:01:07 +0100</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2015 17:01:07 +0100</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>git_hooks</title>
+        <description>&lt;p&gt;Recently I moved my Jekyl blog to a shared web server with a ssh access.
+It was the open door for me to use a git through ssh and so use it to deploy my blog.&lt;/p&gt;
+
+&lt;p&gt;But I had a problem when creating my post-receive hook.
+I was performing a git fetch and a git checkout through my script but I was having a error code 128.&lt;/p&gt;
+
+&lt;p&gt;To investigate a little bit more I began to log each command by redirecting outpout with mycommand &amp;amp;&amp;gt; mylog.txt.&lt;/p&gt;
+
+&lt;p&gt;The exact message was: fatal: Not a git repository: ‘.’&lt;/p&gt;
+
+&lt;p&gt;And I discovered that a shell variable GIT_DIR was set to . instead of .git. Each time I cding to my cloned git dir to perform my fetch and checkout it was expecting a git dir “.”.&lt;/p&gt;
+
+&lt;p&gt;So I edited my shell script and set the correct GIT_DIR variable like the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;c&quot;&gt;# GIT_DIR is . by default, we overwrite it.&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;GIT_DIR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;.git
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/gitwork/myblog
+&lt;span class=&quot;c&quot;&gt;#set &amp;amp;&amp;gt;&amp;gt; ~/log.txt&lt;/span&gt;
+git fetch &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;&amp;gt;&amp;gt; ~/log.txt
+&lt;span class=&quot;c&quot;&gt;#echo Fetching $? &amp;gt;&amp;gt; ~/log.txt&lt;/span&gt;
+git checkout origin/master &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;&amp;gt;&amp;gt; ~/log.txt
+&lt;span class=&quot;c&quot;&gt;#echo Checkouting $? &amp;gt;&amp;gt; ~/log.txt&lt;/span&gt;
+cp -R _site/* ~/www/myblog
+&lt;span class=&quot;c&quot;&gt;#echo &amp;quot;fin&amp;quot; &amp;gt;&amp;gt; ~/log.txt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Tue, 24 Nov 2015 00:00:00 +0100</pubDate>
+        <link>http://albinweb.fr/albinscode//2015/11/24/git-hooks.html</link>
+        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/24/git-hooks.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>getting_rid_of_google</title>
+        <description>&lt;p&gt;Google let us not to bother about the solutions. That’s great.&lt;/p&gt;
+
+&lt;p&gt;But as far as I’ve got some brains I’ll use someting else. I’m not smarter but I just want to control data I’m storing.&lt;/p&gt;
+
+&lt;p&gt;Here I’m quickly describing softwares I’m using to store my music, videos, contacts, calendars and else.&lt;/p&gt;
+
+&lt;p&gt;In fact nothing really hard you only have to choose the right solution. So will you have to try some softwares to have a clear picture by your own.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1-setup-your-private-cloud&quot;&gt;Step 1: Setup your private cloud&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Find a good web hosting:
+    &lt;ul&gt;
+      &lt;li&gt;For me: &lt;a href=&quot;https://www.ovh.com/fr/hebergement-web/hebergement-pro.xml&quot;&gt;ovh-hosting&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Install the owncloud server &lt;a href=&quot;https://doc.owncloud.org/server/8.0/admin_manual/installation/&quot;&gt;owncloud-install&lt;/a&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;For me : owncloud 8.2&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-2-activating-owncloud-plugins&quot;&gt;Step 2: Activating owncloud plugins&lt;/h2&gt;
+
+&lt;p&gt;I’ve activated three useful plugins in owncloud:
+* Calendar: in order to sync all my appointments
+* Contacts: to manage my contacts (email, addresses, phone numbers, etc…)
+* Bookmarks: to manage my web bookmarks (instead of my d.e.l.i.c.i.o.u.s. contacts)&lt;/p&gt;
+
+&lt;h2 id=&quot;step-3-setting-up-my-desktop-computer&quot;&gt;Step 3: Setting up my Desktop computer&lt;/h2&gt;
+
+&lt;p&gt;I’ve installed the desktop application to sync my business data and personal data with two distinct accounts: &lt;a href=&quot;https://owncloud.org/install/#install-clients&quot;&gt;owncloud-desktop-clients&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-4--setting-up-my-mobile-devices&quot;&gt;Step 4 : Setting up my mobile devices&lt;/h2&gt;
+
+&lt;p&gt;I got a tablet (Google Nexus 7, yes, google too :)) and a smartphone (Sony Xperia Aqua M4).&lt;/p&gt;
+
+&lt;p&gt;For my contacts, I’m using CardDav Sync Free: &lt;a href=&quot;https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync&amp;amp;hl=fr&quot;&gt;carddav&lt;/a&gt;.
+You can still use your favorite contacts app because this is a connector.&lt;/p&gt;
+
+&lt;p&gt;To test: https://play.google.com/store/apps/details?id=org.dmfs.tasks&amp;amp;hl=fr&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 24 Nov 2015 00:00:00 +0100</pubDate>
+        <link>http://albinweb.fr/albinscode//2015/11/24/getting-rid-of-google.html</link>
+        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/11/24/getting-rid-of-google.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>importing_wordpress_to_jekyll</title>
@@ -178,6 +266,21 @@ J’ai tellement été sauvé par mes amours et mes passions que je n’arrive p
 
 &lt;p&gt;L’amour avec un être va encore au-delà. C’est un alter ego qui nous pousse à nous dépasser. Je ne recherche pas l’alter ego fusionnel toujours d’accord. Mon caractère me pousse à rechercher des personnes ayant des principes forts qui vont nous permettre de continuer à nous “améliorer” moi et mon alter ego.&lt;/p&gt;
 
+&lt;p&gt;Tout a peut être commencé au collège. Même s’il était des filles qui avaient attiré mon attention et mon coeur dès la primaire.
+L’école primaire, un établissement de l’apprentissage de la vie avant l’heure. La cour est bien plus importante que les cours : formatrice, intransigeante, sociabilisatrice ou isolatrice.&lt;/p&gt;
+
+&lt;p&gt;Moi, je me suis senti à part dès le début. Isolé car les autres me faisaient peur.
+Parfois, j’étais dans la cour, sans souvenir très précis. On pouvait jouer à se courir après, faire peur aux filles, jouer aux billes, sauter dans le bac à sable.
+Puis je me souviens d’une période où je ne partais pas en récréation mais c’était plus tard, au CM2. Isolement certainement dû à l’arrivée de la puberté, tiraillé entre ma nature d’enfant et ma future et inconnue nature d’homme.&lt;/p&gt;
+
+&lt;p&gt;C’est en primaire que deux filles ont commencé à s’intéresser à moi. Myriam et Céline. Céline était particulièrement mignonne. Je ne sais pas trop ce qu’elles me faisaient, c’est très loin, mais elles me faisaient peur, elles me brimaient, me tapaient peut-être ? Je crois que Céline m’avait griffé une fois. Bref, mon amour propre en avait pris un coup.&lt;/p&gt;
+
+&lt;p&gt;Inversement, je me souviens bien m’être particulièrement amusé à courser des filles avec des copains en faisant des bruits de pet savamment produits à l’aide de notre souffle dans nos paumes renversées… L’enfant est insouciant et peut souvent faire du mal sans le savoir…&lt;/p&gt;
+
+&lt;p&gt;A la fin de mon année de CM2, on n’avait plus grand chose à faire et on jouait aux jeux de société et cartes.
+Une certaine Claire, très mignonne jouait avec moi et d’autres à un jeu de cartes je crois.
+Quelque chose en moi - la fin de l’année et donc l’entrée au collège - avait changé. J’étais excité et je me souviens avoir été très lourd avec elle. Je lui avais proposé très ouvertement de m’embrasser au milieu du jeu (on devait faire un jeu de la vérité ou un truc comme ça). Sur le coup, je l’ai dit, j’avais honte au fond de moi mais j’étais parti ! La graine de la provocation était née en moi. Elle mettrait longtemps à s’épanouir mais il me semble que c’est à ce moment là qu’un réel changement s’est opéré en moi.&lt;/p&gt;
+
 </description>
         <pubDate>Thu, 19 Nov 2015 00:00:00 +0100</pubDate>
         <link>http://albinweb.fr/albinscode//2015/11/19/chous.html</link>
@@ -308,336 +411,6 @@ But under Weblogic 12c this is not managed automatically.&lt;/p&gt;
         <pubDate>Tue, 06 Oct 2015 00:00:00 +0200</pubDate>
         <link>http://albinweb.fr/albinscode//2015/10/06/liferay-custom-validator.html</link>
         <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/10/06/liferay-custom-validator.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Distributed_Cache</title>
-        <description>&lt;p&gt;Lots of interesting links about distributed cache:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;http://blog.xebia.fr/2009/08/26/les-caches-ces-armes-a-manipuler-avec-precaution/&lt;/li&gt;
-  &lt;li&gt;http://javalandscape.blogspot.in/2009/01/cachingcaching-algorithms-and-caching.html&lt;/li&gt;
-  &lt;li&gt;In-process caching vs Distributed Caching:
-    &lt;ul&gt;
-      &lt;li&gt;https://dzone.com/articles/process-caching-vs-distributed&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;comparison with Memcached vs Redis vs Hazelcast http://blog.engineering.aol.com/2015/08/28/a-comparative-study-of-distributed-caches/&lt;/li&gt;
-  &lt;li&gt;history:
-    &lt;ul&gt;
-      &lt;li&gt;http://insights.wired.com/profiles/blogs/cache-data-grid-database#axzz3lu5l2nvW&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;distributed cache vs Nosql
-    &lt;ul&gt;
-      &lt;li&gt;http://www.infoq.com/news/2011/11/distributed-cache-nosql-data-sto&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;distributed caches died?
-    &lt;ul&gt;
-      &lt;li&gt;http://www.gridgain.com/distributed-caching-is-dead-long-live/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;video on data griding:
-    &lt;ul&gt;
-      &lt;li&gt;http://www.jboss.org/video/vimeo/32452279/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;BASE vs ACID:
-    &lt;ul&gt;
-      &lt;li&gt;http://www.johndcook.com/blog/2009/07/06/brewer-cap-theorem-base/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;OpenFHT:
-    &lt;ul&gt;
-      &lt;li&gt;http://vanillajava.blogspot.fr/2014/05/sharedhashmap-vs-redis.html&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Performances
-    &lt;ul&gt;
-      &lt;li&gt;https://bitbucket.org/ssmoot/scala-map-benchmarks&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Scalability vs Availability
-    &lt;ul&gt;
-      &lt;li&gt;http://blog.akquinet.de/2012/07/19/scalable-ha-clustering-with-jboss-as-7-eap-6/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Distributed architecture :
-    &lt;ul&gt;
-      &lt;li&gt;http://blog.couchbase.com/distributed-databases-and-replication-design&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Technologies studied:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Redis (NoSql that can be used as cache only)
-    &lt;ul&gt;
-      &lt;li&gt;http://www.codeproject.com/Articles/636730/Distributed-Caching-using-Redis&lt;/li&gt;
-      &lt;li&gt;http://www.touilleur-express.fr/2013/04/03/redis/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Infinispan (compatible memcached)
-    &lt;ul&gt;
-      &lt;li&gt;can be persisted&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;JBoss Data Grid
-    &lt;ul&gt;
-      &lt;li&gt;based on JBoss application server and Infinispan&lt;/li&gt;
-      &lt;li&gt;need a subscription?&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Java Caching System (JCS)
-    &lt;ul&gt;
-      &lt;li&gt;https://commons.apache.org/proper/commons-jcs&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Hazelcast (http://hazelcast.org/use-cases/caching/) –&amp;gt; free version but commercial features.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;(see http://javalandscape.blogspot.fr/2009/03/intro-to-cachingcaching-algorithms-and.html)&lt;/p&gt;
-
-&lt;p&gt;Technologies ignored:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Google Guava (not distributed, only in memory)&lt;/li&gt;
-  &lt;li&gt;Oracle Coherence&lt;/li&gt;
-  &lt;li&gt;ElastiCache solution amazone payante à base de Redis ou Memcached
-    &lt;ul&gt;
-      &lt;li&gt;https://aws.amazon.com/fr/elasticache/&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;JBoss cache (TreeCache)(replaced by JBoss data grid) –&amp;gt; too old?&lt;/li&gt;
-  &lt;li&gt;EHCache (distributed but too much linked to Terracota)&lt;/li&gt;
-  &lt;li&gt;Memcached in C but gave protocol that is wide spread&lt;/li&gt;
-  &lt;li&gt;Cassandra (nosql)&lt;/li&gt;
-  &lt;li&gt;VMWare Gemfire more big data oriented and not yet open sourced (but will be incubated by apache)&lt;/li&gt;
-  &lt;li&gt;Terracotta Enterprise Suite
-    &lt;ul&gt;
-      &lt;li&gt;commercial http://www.terracotta.org/products/enterprise-suite&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Cache4j (not distributed)&lt;/li&gt;
-  &lt;li&gt;WhirlyCache (not distributed)&lt;/li&gt;
-  &lt;li&gt;SwarmCache (no more activity)&lt;/li&gt;
-  &lt;li&gt;ZooKeeper + Helix (more general cluster)&lt;/li&gt;
-  &lt;li&gt;open HFT for very low latency&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Mandatory criteria:
-- distributed (few nodes) vs replicated (all nodes of the cluser)
-- distributed lock (http://redis.io/topics/distlock)&lt;/p&gt;
-
-&lt;p&gt;Criteria:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Core functionnalities
-    &lt;ul&gt;
-      &lt;li&gt;cache algos&lt;/li&gt;
-      &lt;li&gt;langages&lt;/li&gt;
-      &lt;li&gt;caching data type (POJO, HTTP, JSP, ORM)&lt;/li&gt;
-      &lt;li&gt;POJO caching type: strings, objects, lists, sets, etc…&lt;/li&gt;
-      &lt;li&gt;caching store (memory, disk, etc…)&lt;/li&gt;
-      &lt;li&gt;object sharing same JVM&lt;/li&gt;
-      &lt;li&gt;Invalidation implementations&lt;/li&gt;
-      &lt;li&gt;security&lt;/li&gt;
-      &lt;li&gt;standard (JSR 107)&lt;/li&gt;
-      &lt;li&gt;transactional or not or both (may impact perf) –&amp;gt; ACID. JTA, XA&lt;/li&gt;
-      &lt;li&gt;isolation level (READ_COMMITED, ISOLATION_LEVEL)&lt;/li&gt;
-      &lt;li&gt;offheap&lt;/li&gt;
-      &lt;li&gt;asynchroneous&lt;/li&gt;
-      &lt;li&gt;mono/multi threaded&lt;/li&gt;
-      &lt;li&gt;node autodiscovering (hotrod != memcached)&lt;/li&gt;
-      &lt;li&gt;eviction != expiration&lt;/li&gt;
-      &lt;li&gt;offheap/onheap&lt;/li&gt;
-      &lt;li&gt;cluster communication protocol: JGroups&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Performance and reliability
-    &lt;ul&gt;
-      &lt;li&gt;read/write performance?&lt;/li&gt;
-      &lt;li&gt;reliability (replication)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Maintenance / scalability
-    &lt;ul&gt;
-      &lt;li&gt;ease of use, maintanability, extensibility&lt;/li&gt;
-      &lt;li&gt;cloud readiness&lt;/li&gt;
-      &lt;li&gt;horizontal scaling capability&lt;/li&gt;
-      &lt;li&gt;cost?&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ACID transactions, eviction policies, replication vs. partitioning, active backups
-BASE not ACID&lt;/p&gt;
-
-&lt;p&gt;Read more: http://insights.wired.com/profiles/blogs/cache-data-grid-database#ixzz3luE8lCnd
-Follow us: @Wiredinsights on Twitter | InnovationInsights on Facebook&lt;/p&gt;
-
-&lt;p&gt;Monitoring : jmx, jopr
-protocols: api (jcache), hotrod, reset, memcached, websockets&lt;/p&gt;
-
-&lt;p&gt;Backoffice tool: standalone or online code or scripting&lt;/p&gt;
-
-&lt;p&gt;security: sasl, cachemanager, security realms, etc…&lt;/p&gt;
-
-&lt;p&gt;with replication or not
-JTA compliant transaction 1SR 107 (temporary caching api)
-JSR347 (for datagrid)&lt;/p&gt;
-
-&lt;p&gt;JPA compliancy (access datagrid like hibernate)&lt;/p&gt;
-
-&lt;p&gt;Hotrod smarter protocol&lt;/p&gt;
-
-&lt;p&gt;http://infinispan.org/features/&lt;/p&gt;
-
-&lt;p&gt;Three criteria:
-- consistency (with transaction)
-- availability (redundancy)
-- partition tolerance: when two nodes can’t talk to each other, but there are clients able to talk to either one or both of those nodes&lt;/p&gt;
-
-&lt;p&gt;Performance comparisons:
-- https://commons.apache.org/proper/commons-jcs/JCSvsEHCache.html
-- transaction breaks low latency?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;DÃ©couverte automatique des nÅ“uds sur le rÃ©seau (on dÃ©marre simplement un nouveau nÅ“ud avec une configuration identique).
-Synchronisation et rÃ©partition automatique des donnÃ©es sur chacun des nÅ“uds afin dâ€™assurer une haute disponibilitÃ©.
-RÃ©partition intelligente des donnÃ©es (Cache local) permettant de stocker les donnÃ©es au plus prÃªt de leur utilisation et Ã©vitant les accÃ¨s rÃ©seau.
-En cas de crash dâ€™un nÅ“ud les donnÃ©es quâ€™il contenait sont automatiquement rÃ©parties sur les nÅ“uds restant.
-La rÃ©partition des donnÃ©es est transparente pour le client (on accÃ¨de Ã  toutes les donnÃ©es Ã  partir de nâ€™importe lequel des nÅ“uds).
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
-
-&lt;p&gt;NoSQL and datagriding are converging. There are not coming from the same world but tends to go the same place ;)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Plan&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;1 Introduction  5
-1.1 Contexte de l’administration    6
-2 Présentation fonctionnelle du domaine 7
-2.1 Objectif &amp;amp; Définition   7
-2.2 Un peu d’histoire   8
-2.3 Principes fondamentaux  8
-2.3.1 Le message    9
-2.3.2 Transport de messages 9
-2.3.3 Routage de messages   10
-2.3.4 Les communications    12
-2.3.5 Garantie et fiabilité de l’acheminement des messages  14
-2.3.6 Transaction   14
-2.3.7 Les standards et normes   15
-2.3.8 Sécurité  17
-2.3.9 Exploitation  18
-2.3.10 A propos des performances    21
-2.3.11 Concernant les aspects « développement » 22
-2.4 Cas de « Atom Publishing Protocol » 23
-2.4.1 ATOM  24
-2.4.2 APP   24
-2.4.3 Principe de fonctionnement    25
-2.4.4 Cas d’usage   25
-2.4.5 Ressources AtomPub    26
-2.5 Principales fonctionnalités attendues   26
-2.6 Formalisation des besoins de l’administration via QSOS  33
-3 Analyse QSOS  35
-3.1 Périmètre   35
-3.2 Tendances de recherches sur Google  35
-3.3 Apache ActiveMQ 37
-3.3.1 Introduction  37
-3.3.2 Couverture fonctionnelle  37
-3.3.3 Remarques 38
-3.4 Apache ActiveMQ « Apollo »  40
-3.4.1 Introduction  40
-3.4.2 Couverture fonctionnelle  41
-3.4.3 Remarques 41
-3.5 HornetQ 42
-3.5.1 Introduction  42
-3.5.2 Couverture fonctionnelle  42
-3.5.3 Remarques 43
-3.6 Apache Qpid 44
-3.6.1 Introduction  44
-3.6.2 Couverture fonctionnelle  44
-3.6.3 Remarques 45
-3.7 RabbitMQ    46
-3.7.1 Introduction  46
-3.7.2 Couverture fonctionnelle  46
-3.7.3 Remarques 47
-3.8 ZeroMQ  48
-3.8.1 Introduction  48
-3.8.2 Couverture fonctionnelle  49
-3.8.3 Remarques 49
-3.9 JORAM   51
-3.9.1 Introduction  51
-3.9.2 Couverture fonctionnelle  51
-3.9.3 Remarques 52
-3.10 Apache Kafka   54
-3.10.1 Introduction 54
-3.10.2 Couverture fonctionnelle 54
-3.10.3 Remarques    55
-3.11 Mosquitto  56
-3.11.1 Introduction 56
-3.11.2 Couverture fonctionnelle 56
-3.11.3 Remarques    57
-4 Synthèse  58
-4.1 Panorama    58
-4.2 Couverture fonctionnelle    58
-4.3 Couverture fonctionnelle pondérée   60
-5 Conclusion    62
-6 Méthode QSOS  63
-6.1 Critères maturité   64
-6.2 Grille de comparaison dynamique 65
-6.3 Documents QSOS au format XML&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Introduction
-    Contexte de l'administration
-Présentation fonctionnelle du domaine
-    Objectif et définition
-    Historique
-    Principes fondamentaux
-        Cache distribuée vs Cache en mémoire
-        Cache distribuée vs Datagriding vs NoSQL
-        Clustering
-        Interfaçage du système de cache avec les applications
-    Principales fonctionnalités attendues
-    Formation des besoins de l'administration via QSOS
-Analyse QSOS
-    Périmètre
-    Tendances de recherches sur Google
-    Cas 1
-        Introduction
-        Couverture fonctionnelle
-        Remarques
-    Cas 2, etc...
-Synthèse
-    Panorama
-    Couverture fonctionnelle
-    Couverture fonctionnelle pondérée
-Conclusion
-Méthode QSOS
-&lt;/code&gt;&lt;/pre&gt;
-
-</description>
-        <pubDate>Mon, 14 Sep 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/09/14/distributed-cache.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/09/14/distributed-cache.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Java Benchmarking with JMH</title>
-        <description>&lt;p&gt;An interesting framework to dig.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 07 Sep 2015 00:00:00 +0200</pubDate>
-        <link>http://albinweb.fr/albinscode//2015/09/07/java-benchmarking-with-jmh.html</link>
-        <guid isPermaLink="true">http://albinweb.fr/albinscode//2015/09/07/java-benchmarking-with-jmh.html</guid>
         
         
       </item>
