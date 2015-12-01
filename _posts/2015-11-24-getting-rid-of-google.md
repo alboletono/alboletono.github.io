@@ -45,6 +45,8 @@ I got a tablet (Google Nexus 7, yes, google too :)) and a smartphone (Sony Xperi
 For my contacts, I'm using CardDav Sync Free: [carddav].
 You can still use your favorite contacts app because this is a connector.
 
+For the calendar, to test: https://play.google.com/store/apps/details?id=org.dmfs.caldav.lib&hl=fr
+
 To test: https://play.google.com/store/apps/details?id=org.dmfs.tasks&hl=fr
 
 
