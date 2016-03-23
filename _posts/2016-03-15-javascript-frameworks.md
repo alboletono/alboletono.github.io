@@ -18,7 +18,7 @@ Development tools:
 
 
 
-I've trie with sublime text but as far as the 3 version is beta, I didn't succeeded into setting it:
+I've tried with sublime text but as far as the 3 version is beta, I didn't succeeded into setting it:
 
 - Sublime text 3
 - plugin Package Control
@@ -26,4 +26,5 @@ I've trie with sublime text but as far as the 3 version is beta, I didn't succee
 
 But for me, it is better using directly atom with react plugin (more user friendly)
 
+The web storm, even if commercial (few euros per month), looks like an interesting investment for bigger projects.
 
